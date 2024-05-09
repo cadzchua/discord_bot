@@ -50,7 +50,8 @@ async def ping(ctx):
 async def join(ctx):
     if (ctx.author.voice):
         channel = ctx.message.author.voice.channel
-        await channel.connect()
+        await channel.connect(self_deaf=True)
+        ctx.bot.voice_channel_id = channel.id
     else:
         await ctx.send("You are not in a voice channel, you must be in a voice channel to run this command.")
 
@@ -68,8 +69,6 @@ async def check_empty_voice_channels():
         for vc in bot.voice_clients:
             if len(vc.channel.members) == 1:  # Only bot is present
                 await vc.disconnect()
-                ctx = await bot.get_context(vc.channel)
-                await ctx.send("No one is in the voice channel. I left.")
         await asyncio.sleep(60)  # Check every minute
 
 
